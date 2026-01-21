@@ -50,14 +50,15 @@ get_default_branch() {
     local repo_url="$1"
 
     # 尝试使用 git ls-remote 获取 HEAD 指向的分支
+    # 输出格式: ref: refs/heads/main	HEAD
     local default_branch=$(git ls-remote --symref "$repo_url" HEAD 2>/dev/null | \
-        grep -o 'refs/heads/[^"]*' | \
-        sed 's|refs/heads/||' | \
-        head -n1)
+        grep '^ref:' | \
+        sed 's/^ref: refs\/heads\///' | \
+        awk '{print $1}')
 
     # 如果检测失败，尝试常见的分支名
     if [ -z "$default_branch" ]; then
-        for branch in main master master dev development; do
+        for branch in main master dev development; do
             if git ls-remote --exit-code "$repo_url" "refs/heads/$branch" &>/dev/null; then
                 default_branch="$branch"
                 break
