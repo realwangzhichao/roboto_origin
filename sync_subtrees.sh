@@ -45,19 +45,19 @@ echo "========================================"
 # 第一部分：同步四个主模块
 ###############################################################################
 
-# 定义主模块数组：格式 "模块名:仓库URL:分支名"
+# 定义主模块数组：格式 "模块名|仓库URL|分支名"
 MAIN_MODULES=(
-    "Atom01_hardware:https://github.com/Roboparty/Atom01_hardware.git:main"
-    "atom01_deploy:https://github.com/Roboparty/atom01_deploy.git:main"
-    "atom01_train:https://github.com/Roboparty/atom01_train.git:main"
-    "atom01_description:https://github.com/Roboparty/atom01_description.git:main"
+    "Atom01_hardware|https://github.com/Roboparty/Atom01_hardware.git|main"
+    "atom01_deploy|https://github.com/Roboparty/atom01_deploy.git|main"
+    "atom01_train|https://github.com/Roboparty/atom01_train.git|main"
+    "atom01_description|https://github.com/Roboparty/atom01_description.git|main"
 )
 
 log_info "步骤 1/2: 同步四个主模块"
 echo ""
 
 for module_config in "${MAIN_MODULES[@]}"; do
-    IFS=':' read -r module_name module_url module_branch <<< "$module_config"
+    IFS='|' read -r module_name module_url module_branch <<< "$module_config"
     module_path="modules/$module_name"
 
     echo "----------------------------------------"
@@ -179,7 +179,7 @@ sync_one_submodule() {
 
 # 遍历所有主模块，查找并同步子模块
 for module_config in "${MAIN_MODULES[@]}"; do
-    IFS=':' read -r module_name module_url module_branch <<< "$module_config"
+    IFS='|' read -r module_name module_url module_branch <<< "$module_config"
     module_path="modules/$module_name"
 
     echo "----------------------------------------"
